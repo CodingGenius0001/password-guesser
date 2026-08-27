@@ -78,39 +78,37 @@
   const message = document.getElementById("message");
   const incorrect = document.getElementById("incorrect");
 
-  let debounceTimer = null;
-
   input.addEventListener("input", () => {
+    // Clear any previous result as soon as the user types or clears the field
+    message.style.display = "none";
+    incorrect.style.display = "none";
+  });
+
+  input.addEventListener("keydown", async (e) => {
+    if (e.key !== "Enter") return;
+
     const guess = input.value;
+    if (guess.length === 0) return;
 
-    if (guess.length === 0) {
-      message.style.display = "none";
-      incorrect.style.display = "none";
-      return;
-    }
+    try {
+      const res = await fetch("/api/check-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ guess })
+      });
+      const data = await res.json();
 
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(async () => {
-      try {
-        const res = await fetch("/api/check-password", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ guess })
-        });
-        const data = await res.json();
-
-        if (data.correct) {
-          message.style.display = "flex";
-          incorrect.style.display = "none";
-          input.disabled = true;
-        } else {
-          message.style.display = "none";
-          incorrect.style.display = "block";
-        }
-      } catch (err) {
-        console.error("Request failed:", err);
+      if (data.correct) {
+        message.style.display = "flex";
+        incorrect.style.display = "none";
+        input.disabled = true;
+      } else {
+        message.style.display = "none";
+        incorrect.style.display = "block";
       }
-    }, 150);
+    } catch (err) {
+      console.error("Request failed:", err);
+    }
   });
 </script>
 
