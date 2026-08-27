@@ -6,7 +6,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // The password lives only here, server-side. It is never sent to the client.
-const PASSWORD = process.env.SITE_PASSWORD || "sunshine";
+const PASSWORD = process.env.SITE_PASSWORD || "Helloworld@";
 
 // No rate limiting, no lockouts, no attempt counting — unlimited guesses by design.
 app.post("/api/check-password", (req, res) => {
