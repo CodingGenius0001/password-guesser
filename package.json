@@ -1,0 +1,12 @@
+{
+  "name": "password-guesser",
+  "version": "1.0.0",
+  "description": "Simple online password guessing target for testing, with server-side checking and no rate limits.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
